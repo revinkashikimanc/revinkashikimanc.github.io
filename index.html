@@ -1,0 +1,1597 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>.:: Imelia Rinjani Az-Zahra ::.</title>
+
+  <link rel="icon" type="image/gif" href="https://media.tenor.com/mbsKdEmx9V0AAAAi/bubu-cute-bubu-adorable.gif">
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%}
+    body{
+  background:#080510;
+  color:#fefeff;
+  overflow-x:hidden;
+  overflow-y:auto; /* ✅ biar bisa scroll kalau konten kepanjangan */
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+    #confetti{
+  position:fixed; inset:0;
+  width:100%; height:100%;
+  display:block;
+  z-index:0;
+  transition: opacity 1s ease, filter 420ms ease; /* <- opacity buat fade-out */
+  will-change: opacity, filter;
+  opacity: 1;
+}
+    #content{
+      position:fixed; inset:0;
+      display:grid;
+      place-items:center;
+      text-align:center;
+      z-index:2;
+      padding:24px;
+      pointer-events:none;
+      transition:filter 420ms ease, opacity 380ms ease;
+      will-change:filter, opacity;
+      opacity: 0;
+    }
+
+    body.gate-on #confetti,
+    body.gate-on #content{
+      filter: blur(10px);
+    }
+    body.gate-off #content{
+      opacity: 1;
+    }
+
+    .card{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+    }
+
+    .top-tenor{
+      width:120px;
+      max-width:42vw;
+      height:auto;
+      border-radius:14px;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,.45));
+    }
+
+    .ig-photo{
+  width:180px;       /* 200 -> 180 */
+  max-width:62vw;    /* 66vw -> 62vw */
+  aspect-ratio: 1 / 1;
+  object-fit:cover;
+
+  border-radius:18px;
+
+  /* ✨ LIST BORDER */
+  border: 3px solid rgba(255,255,255,.55);
+
+  /* glow halus */
+  box-shadow:
+    0 0 0 2px rgba(255,105,180,.15),
+    0 0 22px rgba(255,105,180,.35),
+    0 16px 40px rgba(0,0,0,.45);
+}
+
+    h1{
+      font-size:clamp(30px,5vw,58px);
+      letter-spacing:.18em;
+      font-weight:700;
+      text-shadow:0 0 25px rgba(254,254,255,.55);
+      visibility:hidden;
+    }
+    h2{
+      font-size:clamp(16px,2.6vw,24px);
+      letter-spacing:.22em;
+      font-weight:600;
+      text-shadow:0 0 25px rgba(254,254,255,.35);
+      margin-top:10px;
+      visibility:hidden;
+    }
+
+    .transition-in{visibility:visible}
+    .transition-in [class^="letter-"]{opacity:1}
+    h1 [class^="letter-"], h2 [class^="letter-"]{
+      opacity:0;
+      transition:opacity 2.2s ease;
+      display:inline-block;
+    }
+
+    .shine{
+      -webkit-text-fill-color: transparent;
+      background: linear-gradient(
+        110deg,
+        rgba(255,255,255,0.20) 0%,
+        rgba(255,255,255,0.95) 18%,
+        rgba(255,255,255,0.20) 38%,
+        rgba(255,255,255,0.20) 100%
+      );
+      background-size: 240% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: shineSweep 2.4s linear infinite;
+    }
+    @keyframes shineSweep{
+      0%   { background-position: -220% 0; }
+      100% { background-position:  220% 0; }
+    }
+
+    /* ✅ NEXT BUTTON */
+    .next-btn{
+      margin-top: 16px;
+      padding: 12px 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: linear-gradient(135deg, rgba(255,79,163,0.95), rgba(255,123,201,0.95));
+      color:#fff;
+      font-weight:800;
+      letter-spacing:.10em;
+      cursor:pointer;
+      box-shadow: 0 0 18px rgba(255,79,163,.55);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease, opacity .6s ease;
+      user-select:none;
+      pointer-events:auto;
+      -webkit-tap-highlight-color: transparent;
+
+      opacity: 0;
+      transform: translateY(10px);
+      visibility: hidden;
+    }
+    /* ✅ COUNTDOWN di tempat tombol */
+.next-count{
+  margin-top: 16px;
+  width: fit-content;
+  min-width: 140px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,.06);
+  color:#fff;
+  font-weight:900;
+  letter-spacing:.16em;
+  box-shadow: 0 0 18px rgba(255,79,163,.25);
+  user-select:none;
+  pointer-events:none;
+
+  opacity:0;
+  transform: translateY(10px);
+  visibility:hidden;
+}
+
+/* tampil */
+.next-count.show{
+  opacity:1;
+  transform: translateY(0);
+  visibility:visible;
+}
+
+/* anim tiap angka (lebih “hidup”) */
+.next-count.tick{
+  animation: countTick 1s ease forwards;
+}
+
+@keyframes countTick{
+  0%   { opacity:0; transform: translateY(12px) scale(.98); filter: blur(.2px); }
+  18%  { opacity:1; transform: translateY(0)   scale(1.02); filter: blur(0); }
+  70%  { opacity:1; transform: translateY(-2px) scale(1.02); }
+  100% { opacity:0; transform: translateY(-14px) scale(.98); }
+}
+
+    .next-btn.show{
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+    .next-btn:hover{
+      transform: translateY(-1px) scale(1.03);
+      box-shadow: 0 0 28px rgba(255,79,163,.85);
+      filter: brightness(1.05);
+    }
+    .next-btn:active{ transform: scale(0.97); }
+
+    /* =========================
+       ✅ START POPUP
+       ========================= */
+    .startPop{
+      position:fixed; inset:0;
+      z-index: 20000; /* di atas gate */
+      display:none;
+      align-items:center; justify-content:center;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity:0;
+      transition: opacity .95s ease; /* ✅ dipelanin */
+    }
+    .startPop.show{ display:flex; opacity:1; }
+    .startPop.hide{ opacity:0; pointer-events:none; }
+
+    .startCard{
+      width:min(420px, 90vw);
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      padding: 18px;
+      text-align:center;
+      box-shadow: 0 30px 90px rgba(0,0,0,.55);
+      transform: translateY(6px);
+      opacity: 0;
+      animation: startCardIn .85s ease forwards;
+    }
+    @keyframes startCardIn{
+      to{ transform: translateY(0); opacity: 1; }
+    }
+
+    .startTitle{ font-weight:900; }
+    .startSub{ margin-top:6px; font-size:13px; color: rgba(255,255,255,.72); }
+    .startBtn{
+      margin-top:14px;
+      width:100%;
+      border:0;
+      padding:12px 14px;
+      border-radius: 999px;
+      font-weight:900;
+      cursor:pointer;
+      background: linear-gradient(135deg, #ff5ea8, #8a5cff);
+      color: rgba(255,255,255,.92);
+      display:block;
+      margin: 16px auto 0;
+      max-width: 260px;
+    }
+
+    /* =========================
+       ✅ GATE overlay
+       ========================= */
+    .gate{
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display:none;
+
+  overflow-y: auto;                 /* ✅ KUNCI SCROLL */
+  -webkit-overflow-scrolling: touch;
+}
+    .gate.show{display:block}
+
+    .gateBackdrop{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(255,94,168,.35), transparent 60%),
+        radial-gradient(900px 600px at 80% 20%, rgba(138,92,255,.45), transparent 60%),
+        linear-gradient(160deg, #0b1020, #1a1033);
+      opacity: 0;
+      animation: gateBackdropIn 1.05s ease forwards; /* ✅ dipelanin */
+    }
+    @keyframes gateBackdropIn{
+      to{ opacity: 1; }
+    }
+
+    /* blur konten index */
+    body.gated > #content{
+      filter: blur(10px);
+      pointer-events:none;
+      user-select:none;
+    }
+
+    .gateCard{
+  position:relative;
+  width: min(560px, calc(100% - 32px));
+  margin: 16px auto;   /* ❗ ganti dari 8vh */
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 30px 90px rgba(0,0,0,.55);
+  padding: 18px;
+}
+
+    .gateGif{
+      width:80px;
+      margin: 6px 0 6px;
+      display:block;
+      border-radius:12px;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,.35));
+    }
+
+    .gateTop{
+      display:flex; align-items:center; gap:12px;
+      padding: 6px 6px 14px;
+    }
+    .gateDot{
+      width:12px;height:12px;border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.2) 35%, transparent 60%),
+                  linear-gradient(135deg, #ff5ea8, #8a5cff);
+      box-shadow: 0 0 18px rgba(255,94,168,.35);
+    }
+    .gateTitle{font-weight:900; letter-spacing:.2px}
+    .gateSub{font-size:13px; color: rgba(255,255,255,.70); margin-top:2px}
+
+    .gateBody{padding: 4px 6px 8px}
+    .gateText{margin:0 0 14px; color: rgba(255,255,255,.78); line-height:1.45}
+
+    .gateBtn{
+      width:100%;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      padding: 12px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      cursor:pointer;
+      transition: transform .12s ease, filter .12s ease, box-shadow .2s ease, opacity .2s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .gateBtn:hover{filter: brightness(1.06)}
+    .gateBtn:active{transform: scale(.99)}
+    .gateBtn.primary{
+      border:0;
+      background: linear-gradient(135deg, #ff5ea8, #8a5cff);
+      box-shadow: 0 12px 28px rgba(138,92,255,.20);
+    }
+    .gateBtn.disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      filter: grayscale(.2);
+      box-shadow:none;
+    }
+
+    .gateHint{
+      margin-top:10px;
+      font-size:12px;
+      color: rgba(255,255,255,.60);
+      text-align:center;
+    }
+
+    .gateBody, .gateReveal{transition: opacity .45s ease, transform .55s ease;}
+    .gateBody.hiding{opacity:0; transform: translateY(-6px); pointer-events:none;}
+    .gateReveal{padding: 4px 6px 10px; opacity:0; transform: translateY(10px);}
+    .gateReveal.hidden{display:none}
+    .gateReveal.showing{opacity:1; transform: translateY(0);}
+
+    .gateMedia{
+      border-radius: 18px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.12);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      position:relative;
+      isolation:isolate;
+    }
+    .gateMedia img{
+      width:auto;
+      height:auto;
+      max-width:92vw;
+      max-height:52vh;
+      object-fit:contain;
+      display:block;
+      position:relative;
+      z-index:1;
+    }
+
+    .loveLayer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:2;
+      opacity:0;
+      transition: opacity .35s ease;
+    }
+    .gateMedia.loving .loveLayer{opacity:1}
+    .tinyLove{
+      position:absolute;
+      width:10px; height:10px;
+      transform: rotate(45deg);
+      background: linear-gradient(135deg, rgba(255,94,168,.95), rgba(138,92,255,.95));
+      opacity:.0;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,.28));
+      animation: loveFloat 1.8s ease-in-out infinite;
+      border-radius: 2px;
+    }
+    .tinyLove::before,.tinyLove::after{
+      content:"";
+      position:absolute;
+      width:10px; height:10px;
+      border-radius:50%;
+      background: inherit;
+    }
+    .tinyLove::before{left:-5px; top:0}
+    .tinyLove::after{left:0; top:-5px}
+    @keyframes loveFloat{
+      0%{ transform: translateY(10px) rotate(45deg) scale(.9); opacity:0}
+      20%{opacity:.55}
+      50%{ transform: translateY(-6px) rotate(45deg) scale(1.05); opacity:.65}
+      80%{opacity:.35}
+      100%{ transform: translateY(10px) rotate(45deg) scale(.92); opacity:0}
+    }
+
+    .gateMsg{margin-top:12px}
+    .gateMsgTitle{font-weight:900}
+    .gateMsgText{
+      margin-top:6px;
+      font-size:13px;
+      color: rgba(255,255,255,.78);
+      line-height:1.45;
+      min-height: 3.2em;
+    }
+    .gateActions{display:flex; gap:10px; margin-top:12px;}
+    .gateActions .gateBtn{width:auto; flex:1}
+
+    .musicIcon{display:inline-block; transform-origin:center;}
+    .gateBtn.on{box-shadow: 0 12px 28px rgba(255,94,168,.14);}
+    .gateBtn.on .musicIcon{
+      animation: wiggle .9s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(138,92,255,.25));
+    }
+    @keyframes wiggle{
+      0%,100%{transform: rotate(-8deg) scale(1.02)}
+      50%{transform: rotate(8deg) scale(1.02)}
+    }
+
+    .caret{
+      display:inline-block;
+      width: 8px;
+      margin-left: 2px;
+      opacity:.9;
+      transform: translateY(1px);
+      animation: blink 0.9s steps(1) infinite;
+    }
+    @keyframes blink{
+      0%,49%{opacity:1}
+      50%,100%{opacity:0}
+    }
+
+    .gateCount{
+      margin-top:14px;
+      padding: 12px 12px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.10);
+    }
+    .gateCountTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      color: rgba(255,255,255,.78);
+      font-size:12px;
+      margin-bottom:8px;
+    }
+    .gateCountTop b{color: rgba(255,255,255,.92)}
+    .gateCountGrid{display:flex; gap:10px; justify-content:space-between;}
+    .gBox{
+      flex:1;
+      text-align:center;
+      padding:10px 8px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.12);
+    }
+    .gNum{font-size:20px;font-weight:900}
+    .gLbl{margin-top:2px;font-size:11px;color: rgba(255,255,255,.65)}
+
+    .gate.exiting .gateBackdrop{ animation: gateFadeBackdrop .95s ease forwards; } /* ✅ dipelanin */
+    .gate.exiting .gateCard{ animation: gateFadeCard .95s ease forwards; }         /* ✅ dipelanin */
+    @keyframes gateFadeBackdrop{ from{opacity:1} to{opacity:0} }
+    @keyframes gateFadeCard{
+      from{opacity:1; transform: translateY(0) scale(1)}
+      to{opacity:0; transform: translateY(20px) scale(.98)}
+    }
+
+    .miniPop{
+      position:absolute;
+      left:50%;
+      top:18px;
+      transform: translateX(-50%);
+      width: min(520px, calc(100% - 18px));
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(20,16,40,.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 22px 70px rgba(0,0,0,.55);
+      padding: 12px 12px;
+      z-index: 10000;
+      display:none;
+      opacity:0;
+    }
+    .miniPop.show{
+      display:block;
+      animation: popIn .25s ease forwards;
+    }
+    @keyframes popIn{
+      from{opacity:0; transform: translateX(-50%) translateY(-6px) scale(.98)}
+      to{opacity:1; transform: translateX(-50%) translateY(0) scale(1)}
+    }
+    .miniPopRow{display:flex; gap:10px; align-items:flex-start;}
+    .miniIcon{
+      width:34px;height:34px;border-radius:12px;
+      display:grid;place-items:center;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      flex:0 0 auto;
+    }
+    .miniTitle{font-weight:900}
+    .miniText{margin-top:2px;font-size:13px;color: rgba(255,255,255,.75);line-height:1.35}
+    .miniActions{display:flex; gap:10px; justify-content:flex-end; margin-top:10px;}
+    .miniBtn{
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.92);
+      padding:10px 12px;
+      border-radius: 999px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .miniBtn.primary{
+      border:0;
+      background: linear-gradient(135deg, #ff5ea8, #8a5cff);
+      box-shadow: 0 12px 28px rgba(138,92,255,.18);
+    }
+
+    /* =========================
+       ✅ IG FEED (1:1) DI DALAM GATE CARD
+       ========================= */
+    .gateIgWrap{
+      margin: 10px 0 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.10);
+      padding: 10px;
+    }
+    .gateIgLabel{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap:10px;
+      color: rgba(255,255,255,.78);
+      font-size:12px;
+      margin: 0 2px 8px;
+    }
+    .gateIgLabel b{ color: rgba(255,255,255,.92); }
+
+    .gateIgGrid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:8px;
+    }
+    .gateIgGrid img{
+  width:100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 12px; /* 14 -> 12 */
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 8px 22px rgba(0,0,0,.26); /* dikit lebih kecil */
+  display:block;
+  transform: translateZ(0);
+}
+
+
+    @media (max-width:420px){
+  .gateIgGrid{ gap:8px; }         /* 7 -> 8 biar lebih lega */
+  .gateIgGrid img{ border-radius: 11px; } /* 12 -> 11 */
+}
+
+    @media (prefers-reduced-motion: reduce){
+      .shine{ animation:none; }
+      .bf, .heart{ animation:none !important; }
+      .next-btn{ transition:none; }
+      .startPop{ transition:none; }
+      .gateBackdrop, .gateCard{ animation:none; opacity:1; transform:none; }
+    }
+
+    .nameWrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-top:10px;
+}
+
+.sideEmoji{
+  opacity: 0;
+  transform: translateY(6px) scale(.96);
+  filter: drop-shadow(0 0 10px rgba(255,255,255,.5));
+  animation: emojiFadeIn 5s ease forwards;
+  animation-delay: 5.5s; /* ⏱️ ATUR DELAY DI SINI */
+}
+
+@keyframes emojiFadeIn{
+  to{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+  </style>
+</head>
+
+<body class="gate-on gated">
+  <canvas id="confetti"></canvas>
+  <div id="butterflies"></div>
+
+  <div id="content">
+    <div class="card">
+      <img class="top-tenor" alt="gif atas"
+           src="https://media.tenor.com/P2wR2VzzQUgAAAAj/pengu-pudgy.gif" />
+
+      <img class="ig-photo" alt="foto" src="images/imelia.jpg" />
+
+      <h1 id="h1">HAPPY BIRTHDAY</h1>
+      <div class="nameWrap">
+  <span class="sideEmoji">💖</span>
+  <h2 id="h2">IMELIA RINJANI AZ-ZAHRA</h2>
+  <span class="sideEmoji">💖</span>
+</div>
+      <div class="next-count" id="nextCount" aria-hidden="true"></div>
+      <button class="next-btn" id="nextBtn" type="button">LANJUT ➜</button>
+      <footer>🎵 One Direction - Where We Are.</footer>
+      <footer>Made with love 💖 @rahmadyxz</footer>
+    </div>
+  </div>
+
+  <!-- ✅ START POPUP -->
+  <div id="startPop" class="startPop show" aria-hidden="false">
+    <div class="startCard">
+      <img
+        src="https://media.tenor.com/Y3bJsdez11QAAAAi/cute-spin-cute-bubu.gif"
+        alt="gif"
+        style="width:140px; border-radius:16px; margin-bottom:14px;"
+      >
+      <div class="startTitle">Siap ya 🤩</div>
+      <button id="startBtn" class="startBtn" type="button">Mulai ✨</button>
+      <div class="startSub">Made with love 💖 @rahmadyxz</div>
+    </div>
+  </div>
+
+  <!-- ✅ GATE overlay (countdown + lock + reveal) -->
+  <!-- ❗️FIX: awalnya HIDDEN, baru muncul setelah klik "Mulai ✨" -->
+  <div id="gate" class="gate" aria-hidden="true">
+    <div class="gateBackdrop"></div>
+
+    <div class="gateCard" role="dialog" aria-modal="true" aria-label="Surat sebelum masuk">
+
+      <div id="gateAlert" class="miniPop" aria-live="polite">
+        <div class="miniPopRow">
+          <div class="miniIcon">🤪</div>
+          <div style="flex:1">
+            <div class="miniTitle">Eits tunggu dulu…</div>
+            <div class="miniText" id="gateAlertText">
+              Hanya bisa dibuka pada saat kamu ulang tahun.
+            </div>
+          </div>
+        </div>
+        <div class="miniActions">
+          <button class="miniBtn" id="gateAlertClose" type="button">Oke</button>
+          <button class="miniBtn primary" id="gateAlertOk" type="button">Siap 😝</button>
+        </div>
+      </div>
+
+      <div class="gateTop">
+        <div class="gateDot"></div>
+        <div>
+          <div class="gateTitle">Buat kamu 💌</div>
+          <img
+            src="https://media1.tenor.com/m/1nIDXbABxgsAAAAC/gif-gifkk.gif"
+            class="gateGif"
+            alt="gif">
+          <div class="gateSub"></div>
+        </div>
+      </div>
+
+      <div id="gateBody" class="gateBody">
+        <p class="gateText">
+          Ada pesan kecil untuk kamu.
+          <br/>
+          Buka dulu ya sebelum masuk 😋
+        </p>
+
+        <!-- ✅ IG FEED FOTO (1:1) DI GATE CARD -->
+        <div class="gateIgWrap" aria-label="Foto kita">
+          <div class="gateIgLabel">
+            <span>Foto 📸</span>
+            <b>Kamu🤍</b>
+          </div>
+          <div class="gateIgGrid">
+            <img src="images/p1.jpg" alt="foto 1" loading="lazy" decoding="async">
+            <img src="images/p2.jpg" alt="foto 2" loading="lazy" decoding="async">
+            <img src="images/p3.jpg" alt="foto 3" loading="lazy" decoding="async">
+          </div>
+        </div>
+
+        <button id="gateOpen" class="gateBtn primary" type="button">
+          Buka pesannya ✨ <span class="musicIcon">🎵</span>
+        </button>
+
+        <div class="gateCount" aria-label="Countdown">
+          <div class="gateCountTop">
+            <span id="gateCountLabel">Hitungan Mundur Menuju</span>
+            <b id="gateCountDate">—</b>
+          </div>
+          <div class="gateCountGrid">
+            <div class="gBox"><div class="gNum" id="gD">0</div><div class="gLbl" id="gDL">Hari</div></div>
+            <div class="gBox"><div class="gNum" id="gH">00</div><div class="gLbl" id="gHL">Jam</div></div>
+            <div class="gBox"><div class="gNum" id="gM">00</div><div class="gLbl" id="gML">Menit</div></div>
+            <div class="gBox"><div class="gNum" id="gS">00</div><div class="gLbl" id="gSL">Detik</div></div>
+          </div>
+          <div class="gateHint" id="gateCountNote" style="margin-top:8px"></div>
+        </div>
+
+        <div class="gateHint" style="margin-top:12px">
+          Made with love 💖 @rahmadyxz
+        </div>
+      </div>
+
+      <div id="gateReveal" class="gateReveal hidden">
+        <div class="gateMedia" id="gateMedia">
+          <img id="gateImg" src="images/cover.jpg" alt="Foto" />
+          <div class="loveLayer" id="loveLayer"></div>
+        </div>
+
+        <div class="gateMsg">
+          <div class="gateMsgTitle">Happy birthday my babyyyy🤍</div>
+          <div class="gateMsgText" id="gateText"></div>
+        </div>
+
+        <div class="gateActions">
+          <button id="gateSkip" class="gateBtn" type="button">Skip</button>
+          <button id="gateReplay" class="gateBtn" type="button">Ulang lagu 🎵</button>
+        </div>
+
+        <div class="gateHint">Tunggu sampai lagunya habis ya ^_^</div>
+        <div class="gateHint">Made with love 💖 @rahmadyxz</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ AUDIO: gate song (birthday.mp3) -->
+  <audio id="bgmGate" preload="auto">
+    <source src="birthday.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- ✅ AUDIO: index song (golden.mp3) -->
+  <audio id="bgm" preload="auto" loop></audio>
+
+  <!-- ✅ AUDIO: start popup song -->
+  <audio id="bgmStart" preload="auto" loop>
+    <source src="penjaga.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    // =========================
+    // Config (SETTING DISINI)
+    // =========================
+    const AUDIO_SRC = "direction.mp3";     // musik index (loop)
+    const NEXT_PAGE = "page.html";
+    const BTN_DELAY_SEC = 15;
+
+    // ✅ Gate config
+    const CONFIG = {
+      birthday: "2026-02-06", // full date
+      gateMessage: "Semoga hari ini kamu senyum terus ya. Aku bangga sama kamu. 💖",
+      lockedMessage: "Hanya bisa dibuka pada saat kamu ulang tahun 💗🤍",
+      fireworksDelaySec: 2,   // delay awal sebelum mulai (sekali doang pas masuk index)
+      fireworksOnSec: 34,       // nyala berapa detik
+      fireworksOffSec: 2,       // mati berapa detik
+      fireworksFadeSec: 1,    // durasi fade in/out (detik)
+
+      // volume
+      gateMusicVolume: 0.55,
+      gateMusicFadeInMs: 1200,
+
+      startMusicVolume: 0.55,
+      startMusicFadeInMs: 900,
+    };
+
+    // ========= per-letter animation =========
+    function animateLetters(id) {
+      const el = document.getElementById(id);
+      const raw = el.textContent;
+      let out = "";
+      for (let i = 0; i < raw.length; i++) {
+        const ch = raw[i];
+        if (ch === " ") out += "&nbsp;";
+        else out += `<span class="letter-${i}" style="transition-delay:${Math.min(3.0, 0.12*i).toFixed(2)}s">${escapeHtml(ch)}</span>`;
+      }
+      el.innerHTML = out;
+      setTimeout(() => el.classList.add("transition-in"), 250);
+    }
+    function escapeHtml(s) {
+      return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+    }
+
+    // =========================
+    // AUDIO (index): fade in / fade out
+    // =========================
+    const bgm = document.getElementById("bgm");
+    let fadeTimer = 0;
+
+    function clearFade(){
+      if (fadeTimer) { clearInterval(fadeTimer); fadeTimer = 0; }
+    }
+    function fadeTo(targetVol, duration = 1800){
+      clearFade();
+      const start = bgm.volume;
+      const diff = targetVol - start;
+      const steps = 24;
+      let i = 0;
+
+      fadeTimer = setInterval(() => {
+        i++;
+        const t = i / steps;
+        bgm.volume = Math.max(0, Math.min(1, start + diff * t));
+        if (i >= steps) {
+          bgm.volume = Math.max(0, Math.min(1, targetVol));
+          clearFade();
+          if (targetVol === 0) bgm.pause();
+        }
+      }, Math.max(16, Math.floor(duration / steps)));
+    }
+
+    async function startIndexMusic(){
+      if (!AUDIO_SRC) return false;
+      if (!bgm.src) bgm.src = AUDIO_SRC;
+
+      try{
+        bgm.volume = 0;
+        await bgm.play();
+        fadeTo(1, 2200);
+        return true;
+      }catch(e){
+        return false;
+      }
+    }
+
+    function fadeOutMusic(){
+      if (!AUDIO_SRC) return;
+      if (!bgm.paused) fadeTo(0, 1200);
+    }
+
+    function fadeInMusicIfReady(){
+      if (!AUDIO_SRC) return;
+      if (!document.body.classList.contains("gate-off")) return;
+      if (bgm.src) {
+        bgm.volume = 0;
+        bgm.play().then(() => fadeTo(1, 1400)).catch(()=>{});
+      }
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) fadeOutMusic();
+      else fadeInMusicIfReady();
+    });
+
+    // =========================
+    // ✅ NEXT BUTTON (delay setelah index masuk)
+    // =========================
+    const nextBtn = document.getElementById("nextBtn");
+const nextCount = document.getElementById("nextCount");
+
+let btnTimer = 0;
+
+function showNextButton(){
+  nextBtn.classList.add("show");
+  nextBtn.disabled = false;
+}
+
+function resetCountdownUI(){
+  if(!nextCount) return;
+  nextCount.classList.remove("show", "tick");
+  nextCount.textContent = "";
+  nextCount.setAttribute("aria-hidden","true");
+}
+
+async function startCountdownThenShowButton(seconds){
+  // safety: kalau kepanggil 2x
+  if (btnTimer) return;
+  btnTimer = 1;
+
+  // tombol disembunyiin dulu
+  nextBtn.classList.remove("show");
+  nextBtn.disabled = true;
+
+  // kalau countdown 0 ya langsung
+  const total = Math.max(0, parseInt(seconds || 0, 10));
+  if(!nextCount || total <= 0){
+    showNextButton();
+    return;
+  }
+
+  // tampilkan countdown di tempat tombol
+  nextCount.classList.add("show");
+  nextCount.setAttribute("aria-hidden","false");
+
+  for(let s = total; s >= 1; s--){
+    // set angka
+    nextCount.textContent = String(s);
+
+    // restart animasi tiap angka
+    nextCount.classList.remove("tick");
+    void nextCount.offsetHeight; // force reflow biar anim ke-reset
+    nextCount.classList.add("tick");
+
+    // tunggu 1 detik per angka (sesuai durasi anim)
+    await new Promise(r => setTimeout(r, 1000));
+  }
+
+  // selesai: hide countdown, show tombol
+  resetCountdownUI();
+  showNextButton();
+}
+
+    nextBtn.addEventListener("click", () => {
+      nextBtn.disabled = true;
+      nextBtn.style.opacity = "0.85";
+      window.location.href = NEXT_PAGE;
+    });
+
+    // ==========================
+    // 🔥 FIREWORKS: ROCKET -> HEART BURST
+    // ==========================
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d", { alpha:true });
+    function setConfettiOpacityInstant(val){
+  const prev = canvas.style.transition;
+  canvas.style.transition = "none";      // matiin transisi dulu
+  canvas.style.opacity = String(val);    // set langsung
+  canvas.offsetHeight;                   // force reflow biar ke-apply
+  canvas.style.transition = prev || "";  // balikin transisi
+}
+
+    let DPR = Math.max(1, Math.min(1.6, window.devicePixelRatio || 1));
+    let W = 0, H = 0;
+
+    function resizeCanvas(){
+      DPR = Math.max(1, Math.min(1.6, window.devicePixelRatio || 1));
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width  = Math.floor(W * DPR);
+      canvas.height = Math.floor(H * DPR);
+      canvas.style.width = W + "px";
+      canvas.style.height = H + "px";
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    const isMobile = matchMedia("(max-width: 860px)").matches;
+    const prefersReduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const QUALITY = prefersReduced ? 0.0 : (isMobile ? 0.72 : 1.0);
+
+    const rockets = [];
+    const sparks = [];
+    let fwRAF = 0;
+    let fwLooping = false;
+
+    function rand(min,max){ return min + Math.random()*(max-min); }
+    function hsl(h,s,l,a=1){ return `hsla(${h} ${s}% ${l}% / ${a})`; }
+
+    function heartPoints(count){
+      const pts = [];
+      for(let i=0;i<count;i++){
+        const t = (i / count) * Math.PI * 2;
+        const x = 16 * Math.pow(Math.sin(t),3);
+        const y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+        pts.push({x, y});
+      }
+      return pts;
+    }
+    const HEART = heartPoints(Math.max(60, Math.floor(220 * QUALITY)));
+
+    function spawnRocket(){
+      const x = rand(W*0.12, W*0.88);
+      const y = H + 12;
+      const peakY = rand(H*0.08, H*0.26);
+      const hue = rand(0, 360);
+
+      rockets.push({
+        x, y,
+        vx: rand(-0.8, 0.8),
+        vy: rand(-14.5, -18.5) * (0.85 + 0.3*Math.random()),
+        peakY,
+        hue,
+        trail: []
+      });
+    }
+
+    function explodeHeart(rx, ry, hueBase){
+      const scale = rand(3.2, 4.6);
+      const burst = HEART.length;
+
+      for(let i=0;i<burst;i++){
+        const p = HEART[i];
+        const dx = (p.x / 16) * scale;
+        const dy = (-p.y / 16) * scale;
+
+        const jitter = 0.15;
+        const vx = dx * rand(2.1, 2.8) + rand(-jitter, jitter);
+        const vy = dy * rand(2.1, 2.8) + rand(-jitter, jitter);
+
+        const hue = (hueBase + rand(-30, 30) + (i/burst)*18) % 360;
+        sparks.push({
+          x: rx, y: ry,
+          vx, vy,
+          g: 0.085 + rand(0, 0.03),
+          life: Math.floor(rand(52, 78)),
+          hue,
+          size: Math.max(0.9, rand(1.1, 2.1) * QUALITY),
+          tw: rand(0.35, 0.9)
+        });
+      }
+    }
+
+    function startFireworksLoop(){
+      if(prefersReduced) return;
+      if(fwLooping) return;
+      fwLooping = true;
+
+      ctx.clearRect(0,0,W,H);
+
+      const initial = Math.max(2, Math.floor(3 * QUALITY));
+      for(let i=0;i<initial;i++) spawnRocket();
+
+      if(!fwRAF) fwRAF = requestAnimationFrame(fwLoop);
+    }
+
+    function stopFireworksLoop(){
+      if(fwRAF){ cancelAnimationFrame(fwRAF); fwRAF = 0; }
+      fwLooping = false;
+    }
+
+    function fwLoop(){
+      fwRAF = requestAnimationFrame(fwLoop);
+
+      ctx.fillStyle = "rgba(8,5,16,0.10)";
+      ctx.fillRect(0,0,W,H);
+
+      const chance = 0.18 * QUALITY;
+      if(Math.random() < chance) spawnRocket();
+
+      for(let i=rockets.length-1;i>=0;i--){
+        const r = rockets[i];
+        r.x += r.vx;
+        r.y += r.vy;
+        r.vy += 0.06;
+
+        r.trail.push({x:r.x, y:r.y});
+        if(r.trail.length > Math.floor(14 * QUALITY)) r.trail.shift();
+
+        for(let k=0;k<r.trail.length;k++){
+          const p = r.trail[k];
+          const a = (k / r.trail.length) * 0.85;
+          ctx.fillStyle = hsl((r.hue + k*3)%360, 95, 70, a);
+          ctx.fillRect(p.x, p.y, 2, 2);
+        }
+
+        ctx.fillStyle = hsl(r.hue, 100, 78, 0.95);
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, 1.6, 0, Math.PI*2);
+        ctx.fill();
+
+        if(r.y <= r.peakY || r.vy > -2.2){
+          explodeHeart(r.x, r.y, r.hue);
+          rockets.splice(i,1);
+        }
+        if(r.y > H + 80) rockets.splice(i,1);
+      }
+
+      for(let i=sparks.length-1;i>=0;i--){
+        const s = sparks[i];
+        s.x += s.vx;
+        s.y += s.vy;
+        s.vy += s.g;
+        s.vx *= 0.985;
+        s.vy *= 0.985;
+        s.life -= 1;
+
+        const alpha = Math.max(0, Math.min(1, s.life / 80));
+        const flick = 0.75 + Math.sin((80 - s.life) * s.tw) * 0.25;
+
+        ctx.fillStyle = hsl(s.hue, 100, 70, alpha * flick);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+        ctx.fill();
+
+        if(s.life <= 0 || s.y > H + 40) sparks.splice(i,1);
+      }
+    }
+
+    // ==========================
+    // 🦋 Butterflies pink + explode to hearts
+    // ==========================
+    const bfLayer = document.getElementById("butterflies");
+    let bfTimer = 0;
+
+    function spawnButterfly(){
+      if (prefersReduced) return;
+
+      const existing = bfLayer.querySelectorAll(".bf").length;
+      const cap = isMobile ? 6 : 10;
+      if (existing >= cap) return;
+
+      const b = document.createElement("div");
+      b.className = "bf";
+
+      const size = rand(isMobile ? 28 : 30, isMobile ? 40 : 46);
+      b.style.width = size + "px";
+      b.style.height = size + "px";
+
+      b.style.left = rand(6, 94) + "vw";
+      b.style.setProperty("--dx", rand(-120, 120) + "px");
+
+      const dur = rand(isMobile ? 10 : 12, isMobile ? 16 : 20);
+      b.style.animationDuration = dur + "s";
+
+      b.addEventListener("pointerdown", (ev) => {
+        ev.preventDefault();
+        const rect = b.getBoundingClientRect();
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top + rect.height/2;
+        explodePinkHearts(cx, cy);
+        b.remove();
+      }, { passive:false });
+
+      bfLayer.appendChild(b);
+
+      setTimeout(() => {
+        if (b.isConnected) b.remove();
+      }, (dur * 1000) + 200);
+    }
+
+    function explodePinkHearts(x, y){
+      const count = isMobile ? 10 : 14;
+      for(let i=0;i<count;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.style.left = x + "px";
+        h.style.top  = y + "px";
+        h.style.setProperty("--tx", rand(-80, 80) + "px");
+        h.style.setProperty("--ty", rand(-90, 30) + "px");
+        h.style.animationDuration = rand(520, 820) + "ms";
+        bfLayer.appendChild(h);
+        setTimeout(() => h.remove(), 900);
+      }
+    }
+
+    function startButterflies(){
+      if (bfTimer) return;
+      for(let i=0;i<(isMobile?2:3);i++) spawnButterfly();
+      bfTimer = setInterval(spawnButterfly, isMobile ? 1700 : 1400);
+    }
+
+    function stopButterflies(){
+      if (bfTimer) { clearInterval(bfTimer); bfTimer = 0; }
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if(document.hidden){
+        stopButterflies();
+        stopFireworksLoop();
+      } else {
+        if(document.body.classList.contains("gate-off")){
+          startButterflies();
+          startFireworksLoop();
+        }
+      }
+    });
+
+    // ==========================
+    // ✅ Gate Logic
+    // ==========================
+    const fmtDateID = (d) => new Intl.DateTimeFormat("id-ID", { dateStyle:"long" }).format(d);
+    const fmtWeekdayID = (d) => new Intl.DateTimeFormat("id-ID", { weekday:"long" }).format(d);
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+    const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+    function parseISODateLocal(iso){
+      const [y,m,d] = iso.split("-").map(Number);
+      return new Date(y, (m||1)-1, d||1, 0,0,0,0);
+    }
+    function todayLocal(){
+      const n = new Date();
+      return new Date(n.getFullYear(), n.getMonth(), n.getDate(), 0,0,0,0);
+    }
+    function isUnlockedNow(iso){
+      return todayLocal().getTime() >= parseISODateLocal(iso).getTime();
+    }
+
+    // elements
+    const gate = document.getElementById("gate");
+    const gateOpen = document.getElementById("gateOpen");
+    const gateBody = document.getElementById("gateBody");
+    const gateReveal = document.getElementById("gateReveal");
+    const gateSkip = document.getElementById("gateSkip");
+    const gateReplay = document.getElementById("gateReplay");
+    const gateTextEl = document.getElementById("gateText");
+    const gateMedia = document.getElementById("gateMedia");
+    const loveLayer = document.getElementById("loveLayer");
+
+    const startPop = document.getElementById("startPop");
+    const startBtn = document.getElementById("startBtn");
+
+    const bgmGate = document.getElementById("bgmGate");
+    const bgmStart = document.getElementById("bgmStart");
+
+    // countdown els
+    const gateCountLabel = document.getElementById("gateCountLabel");
+    const gateCountDate = document.getElementById("gateCountDate");
+    const gateCountNote = document.getElementById("gateCountNote");
+    const gD = document.getElementById("gD");
+    const gH = document.getElementById("gH");
+    const gM = document.getElementById("gM");
+    const gS = document.getElementById("gS");
+    const gDL = document.getElementById("gDL");
+    const gHL = document.getElementById("gHL");
+    const gML = document.getElementById("gML");
+    const gSL = document.getElementById("gSL");
+
+    // lock alert
+    const gateAlert = document.getElementById("gateAlert");
+    const gateAlertText = document.getElementById("gateAlertText");
+    const gateAlertClose = document.getElementById("gateAlertClose");
+    const gateAlertOk = document.getElementById("gateAlertOk");
+
+    // typing
+    let typingAbort = { stop:false };
+    function stopTyping(){ typingAbort.stop = true; }
+
+    async function typeText(el, text, opts={}){
+      typingAbort.stop = false;
+      const speed = opts.speedMs ?? 28;
+      const jitter = opts.jitter ?? 18;
+
+      el.innerHTML = "";
+      const txt = document.createElement("span");
+      txt.className = "txt";
+      const caret = document.createElement("span");
+      caret.className = "caret";
+      caret.textContent = "▍";
+      el.appendChild(txt);
+      el.appendChild(caret);
+
+      for(let i=0;i<text.length;i++){
+        if(typingAbort.stop) break;
+        txt.textContent += text[i];
+        await sleep(speed + Math.random()*jitter);
+      }
+
+      await sleep(160);
+      if(caret.isConnected){
+        caret.style.animation = "none";
+        caret.style.opacity = "0";
+        await sleep(100);
+        caret.remove();
+      }
+
+      if(typingAbort.stop) txt.textContent = text;
+    }
+
+    gateTextEl.addEventListener("click", () => {
+      stopTyping();
+      const span = gateTextEl.querySelector(".txt");
+      if(span) span.textContent = CONFIG.gateMessage;
+      else gateTextEl.textContent = CONFIG.gateMessage;
+    });
+
+    // love overlay
+    function buildLove(){
+      loveLayer.innerHTML = "";
+      const n = 12;
+      for(let i=0;i<n;i++){
+        const h = document.createElement("div");
+        h.className = "tinyLove";
+        h.style.left = (10 + Math.random()*80) + "%";
+        h.style.top  = (10 + Math.random()*70) + "%";
+        const d = 1.4 + Math.random()*1.6;
+        const delay = Math.random()*0.9;
+        const size = 8 + Math.random()*8;
+        h.style.width = size + "px";
+        h.style.height = size + "px";
+        h.style.animationDuration = d + "s";
+        h.style.animationDelay = delay + "s";
+        loveLayer.appendChild(h);
+      }
+    }
+    buildLove();
+    function setLoving(on){
+      gateMedia.classList.toggle("loving", !!on);
+      if(on) buildLove();
+    }
+
+    // alert
+    function showGateAlert(msg){
+      gateAlertText.textContent = msg || CONFIG.lockedMessage;
+      gateAlert.classList.add("show");
+      clearTimeout(showGateAlert._t);
+      showGateAlert._t = setTimeout(() => gateAlert.classList.remove("show"), 3200);
+    }
+    gateAlertClose.addEventListener("click", () => gateAlert.classList.remove("show"));
+    gateAlertOk.addEventListener("click", () => gateAlert.classList.remove("show"));
+
+    // volume fade for gate/start
+    function fadeVolumeEl(audioEl, target=0.55, ms=1200){
+      const start = audioEl.volume;
+      const delta = target - start;
+      const t0 = performance.now();
+      function step(t){
+        const p = Math.min((t - t0) / ms, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        audioEl.volume = clamp(start + delta * ease, 0, 1);
+        if(p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    async function playGateMusicFromStart(btn){
+      try { bgmGate.currentTime = 0; } catch(e){}
+      try{
+        bgmGate.volume = 0;
+        await bgmGate.play();
+        if(btn) btn.classList.add("on");
+        fadeVolumeEl(bgmGate, CONFIG.gateMusicVolume ?? 0.55, CONFIG.gateMusicFadeInMs || 1200);
+      }catch(err){
+        if(btn) btn.classList.remove("on");
+        alert("Browser ngeblok autoplay 😄 Klik tombolnya sekali lagi ya.");
+        throw err;
+      }
+    }
+
+    async function playStartMusicFromStart(){
+      if(!bgmStart) return;
+      try{ bgmStart.pause(); bgmStart.currentTime = 0; }catch(e){}
+      bgmStart.volume = 0;
+      try{
+        await bgmStart.play();
+        fadeVolumeEl(bgmStart, CONFIG.startMusicVolume ?? 0.55, CONFIG.startMusicFadeInMs || 900);
+      }catch(_){}
+    }
+    function stopStartMusic(){
+      if(!bgmStart) return;
+      try{ bgmStart.pause(); bgmStart.currentTime = 0; }catch(_){}
+    }
+
+    // gate button state
+    function setGateButtonState(){
+      const allowed = isUnlockedNow(CONFIG.birthday);
+      if(allowed){
+        gateOpen.classList.remove("disabled");
+        gateOpen.disabled = false;
+        gateOpen.title = "";
+      } else {
+        gateOpen.classList.add("disabled");
+        gateOpen.disabled = false; // tetep bisa diklik buat popup
+        gateOpen.title = "Belum bisa dibuka";
+      }
+      return allowed;
+    }
+
+    // countdown render
+    const targetDate = parseISODateLocal(CONFIG.birthday);
+    gateCountDate.textContent = fmtDateID(targetDate);
+
+    function renderStaticDateInfo(){
+      gateCountLabel.textContent = "Tanggal Spesial";
+      gateCountDate.textContent = fmtDateID(targetDate);
+
+      const dd = String(targetDate.getDate()).padStart(2,"0");
+      const mm = String(targetDate.getMonth()+1).padStart(2,"0");
+      const yyyy = String(targetDate.getFullYear());
+
+      gD.textContent = dd;   gDL.textContent = "Tanggal";
+      gH.textContent = mm;   gHL.textContent = "Bulan";
+      gM.textContent = yyyy; gML.textContent = "Tahun";
+      gS.textContent = fmtWeekdayID(targetDate); gSL.textContent = "Hari";
+    }
+
+    let gateCountdownTimer = 0;
+    function tickGateCountdown(){
+      const now = new Date();
+      const unlocked = todayLocal().getTime() >= targetDate.getTime();
+
+      if(unlocked){
+        renderStaticDateInfo();
+        gateCountNote.textContent = "Sekarang udah waktunya 🎂 Silakan dibuka 🤍";
+        setGateButtonState();
+        if(gateCountdownTimer){
+          clearInterval(gateCountdownTimer);
+          gateCountdownTimer = 0;
+        }
+        return;
+      }
+
+      gateCountLabel.textContent = "Hitungan Mundur Menuju";
+      gateCountDate.textContent = fmtDateID(targetDate);
+      gateCountNote.textContent = "";
+
+      const diff = Math.max(0, targetDate.getTime() - now.getTime());
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff / (1000*60*60)) % 24);
+      const mins = Math.floor((diff / (1000*60)) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+
+      gD.textContent = String(days);  gDL.textContent = "Hari";
+      gH.textContent = String(hours).padStart(2,"0"); gHL.textContent = "Jam";
+      gM.textContent = String(mins).padStart(2,"0");  gML.textContent = "Menit";
+      gS.textContent = String(secs).padStart(2,"0");  gSL.textContent = "Detik";
+
+      setGateButtonState();
+    }
+    tickGateCountdown();
+    gateCountdownTimer = setInterval(tickGateCountdown, 1000);
+
+    // close gate -> masuk index
+    let enteredIndexOnce = false;
+    function enterIndex(){
+      try{ bgmGate.pause(); bgmGate.currentTime = 0; bgmGate.volume = 0; }catch(_){}
+      setLoving(false);
+
+      gate.classList.add("exiting");
+      setTimeout(async () => {
+        gate.classList.remove("show");
+        gate.classList.remove("exiting");
+        gate.setAttribute("aria-hidden", "true");
+
+        document.body.classList.remove("gated");
+        document.body.classList.remove("gate-on");
+        document.body.classList.add("gate-off");
+
+        animateLetters("h1");
+        animateLetters("h2");
+        setTimeout(() => {
+          document.getElementById("h1").classList.add("shine");
+          document.getElementById("h2").classList.add("shine");
+        }, 60);
+
+        if(!enteredIndexOnce){
+          enteredIndexOnce = true;
+          // 🔥 FIREWORKS DELAY (pakai detik)
+  setTimeout(() => {
+  runFireworksCycle();
+}, (CONFIG.fireworksDelaySec ?? 0) * 1000);
+          startButterflies();
+          await startIndexMusic();
+          resetCountdownUI();
+startCountdownThenShowButton(BTN_DELAY_SEC);
+        }
+      }, 980); // ✅ dipelanin
+    }
+
+    let fwCycleTimer = 0;
+let fwCycleRunning = false;
+
+function setConfettiFadeSeconds(sec){
+  canvas.style.transitionDuration = `${Math.max(0, sec)}s`;
+}
+
+function sleepMs(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+async function runFireworksCycle(){
+  if(prefersReduced) return;
+  if(fwCycleRunning) return;
+  fwCycleRunning = true;
+
+  // set durasi fade dari config
+  const fadeSec = Number(CONFIG.fireworksFadeSec ?? 0.0);
+  setConfettiFadeSeconds(fadeSec);
+
+  const onMs  = Math.max(0, Number(CONFIG.fireworksOnSec  ?? 30)) * 1000;
+  const offMs = Math.max(0, Number(CONFIG.fireworksOffSec ?? 6))  * 1000;
+
+  // loop terus
+  while(fwCycleRunning){
+    // FADE IN + START
+    canvas.style.opacity = "1";
+    startFireworksLoop();
+
+    await sleepMs(onMs);
+
+    // FADE OUT
+    canvas.style.opacity = "0";
+    await sleepMs(fadeSec * 1000);
+
+    // STOP (biar bener-bener hemat & berhenti)
+    stopFireworksLoop();
+    ctx.clearRect(0,0,W,H);
+
+    await sleepMs(offMs);
+
+    // lanjut loop => balik ke start lagi
+  }
+}
+
+function stopFireworksCycle(){
+  fwCycleRunning = false;
+  stopFireworksLoop();
+  canvas.style.opacity = "0";
+  ctx.clearRect(0,0,W,H);
+}
+
+
+    // START POPUP FLOW
+    function showGateNow(){
+      gate.classList.add("show");
+      gate.setAttribute("aria-hidden","false");
+    }
+
+    if(startBtn && startPop){
+      startBtn.addEventListener("click", async () => {
+        // gesture user: unlock audio
+        await playStartMusicFromStart();
+
+        // fade out popup (lebih pelan)
+        startPop.classList.add("hide");
+        setTimeout(() => {
+          startPop.classList.remove("show");
+          startPop.setAttribute("aria-hidden","true");
+        }, 980); // ✅ dipelanin biar matching transition .95s
+
+        // munculin gate setelah popup mulai turun
+        setTimeout(() => {
+          showGateNow();
+        }, 220);
+      });
+    }
+
+    // Gate open click
+    gateOpen.addEventListener("click", async () => {
+      const allowed = isUnlockedNow(CONFIG.birthday);
+      if(!allowed){
+        showGateAlert(CONFIG.lockedMessage);
+        return;
+      }
+
+      stopStartMusic();
+
+      gateBody.classList.add("hiding");
+      gateReveal.classList.remove("hidden");
+      void gateReveal.offsetHeight;
+      gateReveal.classList.add("showing");
+      setTimeout(() => { gateBody.style.display = "none"; }, 460);
+
+      setLoving(true);
+
+      await playGateMusicFromStart(gateOpen);
+
+      gateTextEl.textContent = "";
+      await sleep(240);
+      typeText(gateTextEl, CONFIG.gateMessage, { speedMs: 28, jitter: 22 });
+
+      bgmGate.onended = () => enterIndex();
+    });
+
+    gateReplay.addEventListener("click", async () => {
+      await playGateMusicFromStart(gateOpen);
+    });
+
+    gateSkip.addEventListener("click", async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      stopStartMusic();
+      stopTyping();
+
+      try { bgmGate.pause(); bgmGate.currentTime = 0; } catch(_){}
+      enterIndex();
+    });
+
+    // init default
+    setGateButtonState();
+  </script>
+</body>
+</html>
+

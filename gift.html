@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hadiah 🎁</title>
+  <style>
+    :root{
+      --bg1:#0b1020; --bg2:#1a1033;
+      --card: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.16);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --accent1:#ff5ea8; --accent2:#8a5cff;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(255,94,168,.18), transparent 60%),
+        radial-gradient(900px 700px at 80% 20%, rgba(138,92,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 50% 90%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:26px 16px 52px;
+      gap:16px;
+      position:relative;
+    }
+
+    .card{
+      width:min(560px, 100%);
+      border:1px solid var(--stroke);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      padding:22px 18px 18px;
+      text-align:center;
+    }
+
+    .title{
+      font-weight:900;
+      font-size: clamp(20px, 3.6vw, 26px);
+      margin:0 0 6px 0;
+      letter-spacing:-.2px;
+    }
+    .sub{
+      margin:0 0 14px 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    .gifWrap{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      margin:8px 0 10px;
+    }
+    .gif{
+      width:160px;
+      max-width:60vw;
+      height:auto;
+      border-radius:18px;
+      filter: drop-shadow(0 10px 22px rgba(0,0,0,.35));
+      transform: translateZ(0);
+      transition: transform .28s ease, filter .28s ease;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+    .gif.pop{
+      transform: scale(1.06) rotate(2deg);
+      filter: drop-shadow(0 16px 28px rgba(0,0,0,.42));
+    }
+
+    .text{
+      font-size:16px;
+      font-weight:800;
+      margin:10px 0 0;
+    }
+
+    .btnRow{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:14px;
+      align-items:center;
+    }
+
+    .btn{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding:12px 16px;
+      border-radius:999px;
+      font-weight:900;
+      cursor:pointer;
+      width:min(320px, 100%);
+      transition: transform .12s ease, filter .12s ease;
+    }
+    .btn:active{transform: translateY(1px) scale(.99)}
+    .primary{
+      border:0;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: 0 14px 32px rgba(138,92,255,.20);
+    }
+
+    a.link{
+      text-decoration:none;
+      display:none;
+    }
+
+    .miniHint{
+      margin-top:10px;
+      color: rgba(255,255,255,.55);
+      font-size:12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="card" aria-label="Gift prank">
+      <h1 class="title">Mau hadiah ya? 🎁</h1>
+      <p class="sub">Oke… tapi harus nurut dulu 😋</p>
+
+      <div class="gifWrap">
+        <img id="giftGif" class="gif"
+             src="https://media.tenor.com/bh9MAiCpL6wAAAAi/birthday-cake.gif"
+             alt="gif hadiah">
+      </div>
+
+      <div id="giftText" class="text">Klik “Hadiah 🎁” dulu</div>
+
+      <div class="btnRow">
+        <button id="giftBtn" class="btn primary" type="button">Hadiah 🎁</button>
+
+        <!-- tombol WA (muncul terakhir) -->
+        <a id="waLink" class="link" target="_blank" rel="noopener"
+           href="https://wa.me/628xxxxxxxxxx?text=aku%20mau%20hadiah%20dong%20😝">
+          <button class="btn" type="button">Chat aku di WhatsApp 💬</button>
+        </a>
+
+        <div id="miniHint" class="miniHint">Made with love 💗 @rahmadyxz</div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ✅ LAGU: mulai pas klik tombol Hadiah -->
+  <!-- Ganti src jadi file lagu lu -->
+  <audio id="giftMusic" preload="auto" loop>
+    <source src="bday.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    // ✅ GANTI NOMOR WA DI SINI
+    const WA_NUMBER = "6289524882317";
+
+    // ✅ STEP PRANK: tiap klik ganti teks + ganti GIF TENOR
+    const STEPS = [
+      {
+        text: "Hehe… belum 😝 klik lagi",
+        gif: "https://media.tenor.com/4IgTeDd8hpkAAAAi/hii.gif"
+      },
+      {
+        text: "Maaf kalau hadiahnya biasa aja🥺",
+        gif: "https://media.tenor.com/rVkYaklPAG8AAAAj/%EB%AA%A8%EC%B0%8C%EB%83%A5.gif"
+      },
+      {
+        text: "Semoga nanti suka sama hadiahnya 💖",
+        gif: "https://media.tenor.com/zT6sL283R3wAAAAj/gift-present.gif"
+      }
+    ];
+
+    const giftBtn = document.getElementById("giftBtn");
+    const giftText = document.getElementById("giftText");
+    const giftGif = document.getElementById("giftGif");
+    const waLink = document.getElementById("waLink");
+    const miniHint = document.getElementById("miniHint");
+
+    // ✅ musik
+    const giftMusic = document.getElementById("giftMusic");
+    let musicStarted = false;
+
+    async function playGiftMusicOnce(){
+      if(musicStarted) return;
+      musicStarted = true;
+      try{
+        giftMusic.volume = 0.55;
+        giftMusic.currentTime = 0;
+        await giftMusic.play();
+      }catch(e){
+        // kalau keblok (jarang, tapi aman)
+        musicStarted = false;
+      }
+    }
+
+    function stopGiftMusic(){
+      try{
+        giftMusic.pause();
+        giftMusic.currentTime = 0;
+      }catch(e){}
+    }
+
+    // set WA link
+    const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent("MANA KADONYA WOIII 🫴🏻")}`;
+    waLink.href = waUrl;
+
+    let step = 0;
+
+    function popGif(){
+      giftGif.classList.add("pop");
+      setTimeout(() => giftGif.classList.remove("pop"), 260);
+    }
+
+    giftBtn.addEventListener("click", async () => {
+      // ✅ trigger lagu pas klik pertama
+      await playGiftMusicOnce();
+
+      popGif();
+
+      const s = STEPS[Math.min(step, STEPS.length - 1)];
+      giftText.textContent = s.text;
+      if(s.gif) giftGif.src = s.gif;
+
+      if(step >= STEPS.length - 1){
+        giftBtn.style.display = "none";
+        waLink.style.display = "inline-block";
+        miniHint.textContent = "Klik tombol di atas untuk ambil hadiahnya 🎁";
+      } else {
+        giftBtn.textContent = (step === 0) ? "Hadiah lagi 🎁" : "Klik lagi 🎁";
+      }
+
+      step++;
+    });
+
+    // ✅ stop lagu pas mau ke WhatsApp (klik tombol WA)
+    waLink.addEventListener("click", (e) => {
+      stopGiftMusic();
+      // biarin link tetep jalan normal (new tab)
+      // kalau mau super aman: bisa delay dikit, tapi ga perlu
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Memori Kita 📷</title>
+  <style>
+    :root{
+      --bg1:#0b1020;
+      --bg2:#1a1033;
+      --card: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.16);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --accent1:#ff5ea8;
+      --accent2:#8a5cff;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(255,94,168,.18), transparent 60%),
+        radial-gradient(900px 700px at 80% 20%, rgba(138,92,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 50% 90%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:28px 16px 60px;
+      gap:18px;
+      position:relative;
+    }
+
+    header{
+      width:min(980px, 100%);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      backdrop-filter: blur(10px);
+      border-radius: 999px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.22);
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:700; letter-spacing:.2px;
+    }
+    .dot{
+      width:12px;height:12px;border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.2) 35%, transparent 60%),
+                  linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: 0 0 18px rgba(255,94,168,.35);
+    }
+    .mini{color:var(--muted);font-size:13px;line-height:1.2}
+    a.btn{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding:10px 12px;border-radius:999px;
+      font-weight:800;
+      text-decoration:none;
+      display:inline-flex;align-items:center;gap:10px;
+      transition: transform .12s ease, filter .12s ease;
+    }
+    a.btn:active{transform: translateY(1px) scale(.99)}
+
+    .card{
+      width:min(980px, 100%);
+      border:1px solid var(--stroke);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .pad{padding:22px}
+    .titleRow{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(20px, 3.2vw, 28px);
+      letter-spacing:-.3px;
+    }
+
+    /* ✅ GIF di judul (2-3 gif) */
+    .titleGifs{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      margin-top:8px;
+      flex-wrap:wrap;
+    }
+    .titleGifs img{
+      width:54px;
+      height:54px;
+      border-radius:14px;
+      object-fit:cover;
+      border:1px solid rgba(255,255,255,.14);
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,.35));
+      opacity:.95;
+    }
+
+    /* ===== Story Stage (9:16) ===== */
+    .stageWrap{
+      display:flex;
+      justify-content:center;
+      padding: 16px 16px 0;
+    }
+    .stage{
+      width: min(420px, 100%);
+      aspect-ratio: 9 / 16;
+      border-radius: 26px;
+      overflow:hidden;
+      position:relative;
+      background: rgba(0,0,0,.18);
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    /* progress bar container */
+    .progress{
+      position:absolute;
+      top:10px; left:10px; right:10px;
+      display:flex;
+      gap:6px;
+      z-index:5;
+      pointer-events:none;
+    }
+    .seg{
+      height:3px;
+      flex:1;
+      border-radius:999px;
+      background: rgba(255,255,255,.22);
+      overflow:hidden;
+    }
+    .seg > i{
+      display:block;
+      height:100%;
+      width:0%;
+      background: rgba(255,255,255,.92);
+      border-radius:999px;
+      transform-origin:left center;
+    }
+
+    /* slides */
+    .slide{
+      position:absolute; inset:0;
+      opacity:0;
+      transform: scale(1.02);
+      transition: opacity .28s ease, transform .45s ease;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .slide.active{opacity:1; transform: scale(1)}
+    .slide img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    /* overlay caption inside story (bottom) */
+    .storyCap{
+      position:absolute;
+      left:0; right:0; bottom:0;
+      padding: 14px 14px 12px;
+      z-index:4;
+      background: linear-gradient(180deg, transparent, rgba(0,0,0,.45));
+    }
+    .storyCap .t{font-weight:900}
+    .storyCap .p{margin-top:4px;color:rgba(255,255,255,.78);font-size:13px;line-height:1.35}
+
+    /* tap areas (like IG) */
+    .tapZone{
+      position:absolute; inset:0;
+      z-index:3;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .tapZone > div{height:100%}
+    .tapZone .left{cursor:w-resize}
+    .tapZone .right{cursor:e-resize}
+
+    /* arrows */
+    .arrow{
+      position:absolute; top:50%;
+      transform: translateY(-50%);
+      width:46px;height:46px;border-radius:999px;
+      display:grid;place-items:center;
+      cursor:pointer; user-select:none;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(15,10,35,.55);
+      backdrop-filter: blur(10px);
+      z-index:6;
+      transition: transform .12s ease, filter .12s ease;
+    }
+    .arrow:hover{filter: brightness(1.06)}
+    .arrow:active{transform: translateY(-50%) scale(.98)}
+    .arrow.left{left:10px}
+    .arrow.right{right:10px}
+
+    /* controls under stage */
+    .captionbar{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:12px;
+      padding:16px 22px 18px;
+      flex-wrap:wrap;
+    }
+    .cap{min-width:0}
+    .capTitle{font-weight:900}
+    .capText{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:13px;
+      max-width: 70ch;
+    }
+
+    .rightMeta{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+
+    .dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+    .dotBtn{
+      width:8px;height:8px;border-radius:999px;
+      background:rgba(255,255,255,.22);
+      border:1px solid rgba(255,255,255,.14);
+      cursor:pointer;
+    }
+    .dotBtn.active{
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      border-color: transparent;
+      box-shadow: 0 0 16px rgba(138,92,255,.25);
+    }
+
+    button{
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding:10px 12px;border-radius:14px;
+      font-weight:800;cursor:pointer;
+      display:inline-flex;align-items:center;gap:10px;
+    }
+    .primary{
+      border:0;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: 0 12px 28px rgba(138,92,255,.18);
+    }
+    .counter{color:var(--muted);font-size:13px}
+
+    footer{
+      width:min(980px, 100%);
+      color: rgba(255,255,255,.55);
+      font-size:12px;
+      text-align:center;
+      margin-top:14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <span class="dot"></span>
+        <div>
+          <div><span id="toName">Nama Doi</span> 📷</div>
+          <div class="mini"></div>
+        </div>
+      </div>
+      <a class="btn" href="index.html">← Balik</a>
+    </header>
+
+    <section class="card">
+      <div class="pad">
+        <div class="titleRow">
+          <div>
+            <h1>Album kecil kita 🙌🏻</h1>
+
+            <!-- ✅ 2-3 GIF di bawah judul -->
+            <div class="titleGifs" aria-label="gif row">
+              <img src="http://media1.tenor.com/m/H1DrMFt9OXEAAAAd/%EB%AA%A8%EC%B0%8C-%EB%AA%A8%EB%AA%A8%EC%B0%8C.gif" alt="gif 1" loading="lazy" decoding="async" />
+              <img src="https://media1.tenor.com/m/NjGE-dbD84sAAAAd/%EB%AA%A8%EC%B0%8C-%EB%AA%A8%EB%AA%A8%EC%B0%8C.gif" alt="gif 2" loading="lazy" decoding="async" />
+              <img src="https://media1.tenor.com/m/EGvXpLWIRXkAAAAd/%EB%AA%A8%EC%B0%8C-%EB%AA%A8%EB%AA%A8%EC%B0%8C.gif" alt="gif 3" loading="lazy" decoding="async" />
+            </div>
+
+            <div class="mini"></div>
+          </div>
+          <div class="rightMeta">
+            <button id="toggleAuto" class="primary">Auto: ON</button>
+            <div class="counter" id="counter">1 / 1</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stageWrap">
+        <div class="stage" id="stage" aria-label="Story slider">
+          <div class="progress" id="progress"></div>
+
+          <div class="arrow left" id="prev" aria-label="Sebelumnya">‹</div>
+          <div class="arrow right" id="next" aria-label="Berikutnya">›</div>
+
+          <div class="tapZone" id="tapZone" aria-hidden="true">
+            <div class="left"></div>
+            <div class="right"></div>
+          </div>
+
+          <div class="storyCap">
+            <div class="t" id="storyTitle">—</div>
+            <div class="p" id="storyText">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="captionbar">
+        <div class="cap">
+          <div class="capTitle" id="capTitle">—</div>
+          <div class="capText" id="capText">—</div>
+        </div>
+        <div class="dots" id="dots"></div>
+      </div>
+    </section>
+
+    <footer>Made with love 💗 @rahmadyxz</footer>
+  </div>
+
+  <!-- ✅ AUDIO: AUTOPLAY + LOOP (monokrom.mp3) -->
+  <audio id="bgm" preload="auto" loop>
+    <source src="monokrom.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    /** ===== EDIT INI ===== */
+    const CONFIG = {
+      toName: "Imelia Rinjani Az-Zahra",
+      slideDurationMs: 4500,
+      slides: [
+        { src: "images/1.jpg", title: "Foto 1" },
+        { src: "images/2.jpg", title: "Foto 2" },
+        { src: "images/3.jpg", title: "Foto 3" },
+        { src: "images/4.jpg", title: "Foto 4" },
+        { src: "images/5.jpg", title: "Foto 5" },
+        { src: "images/6.jpg", title: "Foto 6" },
+        { src: "images/7.jpg", title: "Foto 7" },
+        { src: "images/8.jpg", title: "Foto 8" },
+        { src: "images/9.jpg", title: "Foto 9" },
+        { src: "images/10.jpg", title: "Foto 10" },
+      ],
+      musicVolume: 0.5
+    };
+    /** ==================== */
+
+    document.getElementById("toName").textContent = CONFIG.toName;
+
+    const stage = document.getElementById("stage");
+    const progress = document.getElementById("progress");
+    const dotsEl = document.getElementById("dots");
+    const capTitle = document.getElementById("capTitle");
+    const capText  = document.getElementById("capText");
+    const storyTitle = document.getElementById("storyTitle");
+    const storyText  = document.getElementById("storyText");
+    const counter  = document.getElementById("counter");
+    const tapZone  = document.getElementById("tapZone");
+
+    let slides = CONFIG.slides.slice();
+    let idx = 0;
+
+    // autoplay state (IG-like)
+    let auto = true;
+    let paused = false;
+
+    // timing
+    let raf = null;
+    let startTs = 0;
+    let elapsedBefore = 0;
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    function build(){
+      stage.querySelectorAll(".slide").forEach(n => n.remove());
+      dotsEl.innerHTML = "";
+      progress.innerHTML = "";
+
+      slides.forEach((_, i) => {
+        const seg = document.createElement("div");
+        seg.className = "seg";
+        const fill = document.createElement("i");
+        seg.appendChild(fill);
+        progress.appendChild(seg);
+
+        const d = document.createElement("div");
+        d.className = "dotBtn" + (i === idx ? " active" : "");
+        d.title = "Slide " + (i+1);
+        d.addEventListener("click", () => go(i));
+        dotsEl.appendChild(d);
+      });
+
+      slides.forEach((s, i) => {
+        const wrap = document.createElement("div");
+        wrap.className = "slide" + (i === idx ? " active" : "");
+        const img = document.createElement("img");
+        img.src = s.src;
+        img.alt = s.title || ("Foto " + (i+1));
+        img.loading = "lazy";
+        img.onerror = () => {
+          wrap.innerHTML =
+            "<div style='padding:18px;color:rgba(255,255,255,.75);text-align:center'>" +
+            "Foto tidak ketemu:<br><b style='color:#fff'>" + s.src + "</b><br>" +
+            "Taruh file di folder <b>images/</b></div>";
+        };
+        wrap.appendChild(img);
+        stage.appendChild(wrap);
+      });
+
+      render();
+      resetTimer();
+      restartAuto();
+    }
+
+    function render(){
+      const nodes = stage.querySelectorAll(".slide");
+      const dots = dotsEl.querySelectorAll(".dotBtn");
+      nodes.forEach((n, i) => n.classList.toggle("active", i === idx));
+      dots.forEach((d, i) => d.classList.toggle("active", i === idx));
+
+      const s = slides[idx] || {};
+      capTitle.textContent = s.title || "—";
+      capText.textContent  = s.text || "";
+      storyTitle.textContent = s.title || "—";
+      storyText.textContent  = s.text || "";
+      counter.textContent  = `${Math.min(idx+1, slides.length)} / ${slides.length}`;
+
+      const fills = progress.querySelectorAll(".seg > i");
+      fills.forEach((f, i) => {
+        if(i < idx) f.style.width = "100%";
+        if(i > idx) f.style.width = "0%";
+      });
+    }
+
+    function go(i){
+      idx = (i + slides.length) % slides.length;
+      render();
+      resetTimer();
+      restartAuto();
+    }
+    function next(){ (idx >= slides.length - 1) ? go(0) : go(idx + 1); }
+    function prev(){ (idx <= 0) ? go(slides.length - 1) : go(idx - 1); }
+
+    document.getElementById("next").addEventListener("click", next);
+    document.getElementById("prev").addEventListener("click", prev);
+
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "ArrowRight") next();
+      if(e.key === "ArrowLeft") prev();
+      if(e.key === " "){
+        e.preventDefault();
+        paused = !paused;
+        if(!paused) restartAuto(); else stopAuto();
+      }
+    });
+
+    tapZone.querySelector(".left").addEventListener("click", prev);
+    tapZone.querySelector(".right").addEventListener("click", next);
+
+    // ===== Progress engine =====
+    function resetTimer(){
+      startTs = 0;
+      elapsedBefore = 0;
+      setActiveFill(0);
+    }
+
+    function setActiveFill(pct){
+      const fills = progress.querySelectorAll(".seg > i");
+      const f = fills[idx];
+      if(f) f.style.width = clamp(pct,0,100) + "%";
+    }
+
+    function stopAuto(){
+      if(raf) cancelAnimationFrame(raf);
+      raf = null;
+    }
+
+    function restartAuto(){
+      stopAuto();
+      if(!auto) return;
+      if(paused) return;
+      startTs = 0;
+      raf = requestAnimationFrame(tick);
+    }
+
+    function tick(ts){
+      if(!startTs) startTs = ts;
+
+      const elapsed = (ts - startTs) + elapsedBefore;
+      const pct = (elapsed / CONFIG.slideDurationMs) * 100;
+      setActiveFill(pct);
+
+      if(pct >= 100){
+        setActiveFill(100);
+        elapsedBefore = 0;
+        startTs = 0;
+        next();
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+    }
+
+    function stopAutoPreserve(){
+      if(!raf) return;
+      cancelAnimationFrame(raf);
+      raf = null;
+      if(startTs){
+        elapsedBefore += (performance.now() - startTs);
+        startTs = 0;
+      }
+    }
+
+    // Hold to pause (preserve progress)
+    function pauseNow(){
+      paused = true;
+      stopAutoPreserve();
+    }
+    function resumeNow(){
+      if(!auto) return;
+      paused = false;
+      restartAuto();
+    }
+
+    stage.addEventListener("mousedown", (e) => {
+      if(e.target.closest(".arrow")) return;
+      pauseNow();
+    });
+    window.addEventListener("mouseup", () => { if(paused) resumeNow(); });
+
+    stage.addEventListener("touchstart", (e) => {
+      if(e.target.closest(".arrow")) return;
+      pauseNow();
+    }, {passive:true});
+    stage.addEventListener("touchend", () => { if(paused) resumeNow(); }, {passive:true});
+
+    // Swipe (mobile)
+    let startX = 0, startY = 0, dragging = false;
+    stage.addEventListener("touchstart", (e) => {
+      const t = e.touches[0];
+      startX = t.clientX; startY = t.clientY;
+      dragging = true;
+    }, {passive:true});
+    stage.addEventListener("touchend", (e) => {
+      if(!dragging) return;
+      dragging = false;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      if(Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)){
+        if(dx < 0) next();
+        else prev();
+      }
+    }, {passive:true});
+
+    // Auto toggle
+    const toggleBtn = document.getElementById("toggleAuto");
+    toggleBtn.addEventListener("click", () => {
+      auto = !auto;
+      toggleBtn.textContent = "Auto: " + (auto ? "ON" : "OFF");
+      paused = false;
+      resetTimer();
+      if(auto) restartAuto(); else stopAuto();
+    });
+
+    // =========================
+    // ✅ MUSIC AUTOPLAY (monokrom.mp3) - no button
+    // =========================
+    const bgm = document.getElementById("bgm");
+    bgm.volume = typeof CONFIG.musicVolume === "number" ? CONFIG.musicVolume : 0.5;
+
+    async function tryPlayMusic(){
+      try{
+        await bgm.play();
+      }catch(e){
+        // fallback buat mobile: nyala pas user gesture pertama (tap/scroll)
+        const arm = async () => {
+          window.removeEventListener("pointerdown", arm);
+          window.removeEventListener("touchstart", arm);
+          window.removeEventListener("scroll", arm);
+          try{ await bgm.play(); }catch(_){}
+        };
+        window.addEventListener("pointerdown", arm, { once:true });
+        window.addEventListener("touchstart", arm, { once:true, passive:true });
+        window.addEventListener("scroll", arm, { once:true, passive:true });
+      }
+    }
+    tryPlayMusic();
+
+    // Init
+    if(!slides.length){
+      slides = [{ src:"", title:"Belum ada foto", text:"Isi CONFIG.slides dulu ya." }];
+    }
+    build();
+  </script>
+</body>
+</html>

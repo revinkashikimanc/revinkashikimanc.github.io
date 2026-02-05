@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday 💖</title>
+  <style>
+    :root{
+      --bg1:#0b1020;
+      --bg2:#1a1033;
+      --card: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.16);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.72);
+      --accent1:#ff5ea8;
+      --accent2:#8a5cff;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 22px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(255,94,168,.18), transparent 60%),
+        radial-gradient(900px 700px at 80% 20%, rgba(138,92,255,.22), transparent 60%),
+        radial-gradient(900px 700px at 50% 90%, rgba(255,255,255,.06), transparent 60%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    .wrap{
+      min-height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:28px 16px 60px;
+      gap:18px;
+      position:relative;
+    }
+
+    /* floating hearts */
+    .hearts{position:absolute; inset:0; pointer-events:none; overflow:hidden;}
+    .heart{
+      position:absolute;
+      width:14px; height:14px;
+      transform: rotate(45deg);
+      opacity:.45;
+      filter: blur(.2px);
+      animation: floatUp linear infinite;
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    }
+    .heart::before,.heart::after{
+      content:"";
+      position:absolute;
+      width:14px;height:14px;border-radius:50%;
+      background: inherit;
+    }
+    .heart::before{left:-7px; top:0}
+    .heart::after{left:0; top:-7px}
+
+    @keyframes floatUp{
+      from{transform: translateY(20vh) rotate(45deg); opacity:0}
+      10%{opacity:.55}
+      to{transform: translateY(-120vh) rotate(45deg); opacity:0}
+    }
+
+    header{
+      width:min(980px, 100%);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 16px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      backdrop-filter: blur(10px);
+      border-radius: 999px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.22);
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:700; letter-spacing:.2px;
+    }
+    .dot{
+      width:12px;height:12px;border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,.2) 35%, transparent 60%),
+                  linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: 0 0 18px rgba(255,94,168,.35);
+    }
+    .mini{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.2;
+    }
+    .pill{
+      display:flex; gap:10px; align-items:center;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .pill b{color:var(--text)}
+    .sep{opacity:.4}
+
+    main{
+      width:min(980px, 100%);
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      margin-top:8px;
+    }
+    @media (max-width:860px){
+      main{grid-template-columns:1fr}
+    }
+
+    .card{
+      border:1px solid var(--stroke);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card .pad{padding:22px}
+
+    .hero{
+      min-height: 330px;
+      display:flex;
+      align-items:stretch;
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 400px at 30% 20%, rgba(255,94,168,.24), transparent 55%),
+        radial-gradient(700px 400px at 80% 30%, rgba(138,92,255,.28), transparent 55%),
+        radial-gradient(700px 500px at 60% 90%, rgba(255,255,255,.07), transparent 60%);
+      pointer-events:none;
+    }
+    .hero .content{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:12px;
+      padding:26px;
+      flex:1;
+    }
+
+    h1{
+      margin:0;
+      font-size: clamp(26px, 4.2vw, 44px);
+      line-height:1.05;
+      letter-spacing:-.6px;
+    }
+    .subtitle{
+      margin:0;
+      color: var(--muted);
+      font-size:15px;
+      max-width: 55ch;
+    }
+    .chips{
+      display:flex; flex-wrap:wrap;
+      gap:8px;
+      margin-top:4px;
+    }
+    .chip{
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.12);
+      color: rgba(255,255,255,.82);
+    }
+
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
+    button, a.btn{
+      border:0;
+      cursor:pointer;
+      padding:12px 14px;
+      border-radius: 14px;
+      font-weight:700;
+      letter-spacing:.2px;
+      transition: transform .12s ease, filter .12s ease, background .12s ease;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      text-decoration:none;
+      color: var(--text);
+    }
+    button:active, a.btn:active{transform: translateY(1px) scale(.99)}
+    .primary{
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      box-shadow: 0 12px 28px rgba(138,92,255,.20);
+    }
+    .ghost{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.16);
+    }
+    .tiny{
+      font-size:12px;
+      color: var(--muted);
+      margin-top:8px;
+    }
+
+    .side{
+      display:grid;
+      gap:18px;
+      align-content:start;
+    }
+
+    .countdown{
+      display:flex;
+      gap:10px;
+      justify-content:space-between;
+      margin-top:14px;
+    }
+    .tbox{
+      flex:1;
+      text-align:center;
+      padding:12px 10px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.12);
+    }
+    .tbox .num{
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:.4px;
+    }
+    .tbox .lbl{
+      margin-top:2px;
+      font-size:12px;
+      color: var(--muted);
+    }
+
+    .gallery{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      margin-top:12px;
+    }
+    .ph{
+      aspect-ratio: 1/1;
+      border-radius: 16px;
+      border:1px dashed rgba(255,255,255,.22);
+      background:
+        radial-gradient(500px 220px at 30% 25%, rgba(255,94,168,.18), transparent 60%),
+        radial-gradient(520px 260px at 70% 70%, rgba(138,92,255,.18), transparent 60%),
+        rgba(0,0,0,.10);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:12px;
+      color: rgba(255,255,255,.75);
+      text-align:center;
+      padding:10px;
+      user-select:none;
+    }
+    .ph img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      border-radius: 16px;
+      display:block;
+    }
+
+    /* modal letter */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(8px);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:50;
+    }
+    .overlay.show{display:flex}
+    .modal{
+      width:min(760px, 100%);
+      border-radius: 24px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(20,16,40,.78);
+      box-shadow: 0 30px 90px rgba(0,0,0,.6);
+      overflow:hidden;
+      position:relative;
+    }
+    .modal header{
+      width:100%;
+      border-radius:0;
+      border:0;
+      border-bottom:1px solid rgba(255,255,255,.12);
+      box-shadow:none;
+      background: rgba(255,255,255,.04);
+    }
+    .modal .content{padding:22px 18px 18px}
+    .letter{
+      line-height:1.75;
+      color: rgba(255,255,255,.88);
+      font-size: 15px;
+      white-space:pre-wrap;
+    }
+    .modal .footer{
+      display:flex; gap:10px; justify-content:flex-end;
+      padding: 0 18px 18px;
+    }
+
+    footer{
+      width:min(980px, 100%);
+      color: rgba(255,255,255,.55);
+      font-size:12px;
+      text-align:center;
+      margin-top:auto;
+      padding-top:12px;
+    }
+
+    /* confetti */
+    canvas#confetti{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:60;
+      display:none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+  <div class="wrap">
+    <div class="hearts" id="hearts"></div>
+
+    <header>
+      <div class="brand">
+        <span class="dot"></span>
+        <div>
+          <div>Untuk <span id="nameTop">Doi Kamu</span> 💖</div>
+          <div class="mini" id="dateTop">15 Januari 2026</div>
+        </div>
+      </div>
+      <div class="pill">
+        <span>dibuat oleh <b id="fromTop">Kamu</b></span>
+        <span class="sep">•</span>
+        <span class="mini" id="tagline">“semoga kamu selalu bahagia”</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- Left / Hero -->
+      <section class="card hero">
+        <div class="content">
+          <h1>
+            Happy Birthday,<br />
+            <span id="nameHero">Nama Doi</span> ✨
+          </h1>
+          <p class="subtitle" id="subtitle">
+            Hari ini bukan cuma ulang tahun kamu—ini hari spesial yang bikin dunia jadi sedikit lebih manis.
+            Aku bikin halaman kecil ini biar kamu bisa senyum setiap kali buka.
+          </p>
+
+          <div class="chips">
+            <span class="chip">🎂 Ulang tahun ke-<span id="ageChip">?</span></span>
+            <span class="chip">💌 Ada surat kecil</span>
+            <span class="chip">📸 Ada foto kita</span>
+            <span class="chip">⏳ Countdown ke momen spesial</span>
+          </div>
+
+          <div class="actions">
+            <button class="primary" id="openLetter">Buka surat 💌</button>
+            <button class="ghost" id="boom">Pencet buat kejutan 🎉</button>
+            <a class="btn ghost" href="#memories">Lihat memori 📷</a>
+          </div>
+
+          <div class="tiny">
+            Tip: ganti teks & foto di file ini biar makin “kalian banget”.
+          </div>
+        </div>
+      </section>
+
+      <!-- Right side -->
+      <aside class="side">
+        <section class="card">
+          <div class="pad">
+            <h2 style="margin:0 0 6px 0; font-size:18px;">Countdown ke 00:00</h2>
+            <div class="mini" id="countNote">Menuju ulang tahun berikutnya 🎈</div>
+            <div class="countdown">
+              <div class="tbox"><div class="num" id="d">0</div><div class="lbl">Hari</div></div>
+              <div class="tbox"><div class="num" id="h">0</div><div class="lbl">Jam</div></div>
+              <div class="tbox"><div class="num" id="m">0</div><div class="lbl">Menit</div></div>
+              <div class="tbox"><div class="num" id="s">0</div><div class="lbl">Detik</div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="wishes">
+          <div class="pad">
+            <h2 style="margin:0 0 6px 0; font-size:18px;">Harapan aku buat kamu</h2>
+            <ul style="margin:10px 0 0 18px; color:var(--muted); line-height:1.7;">
+              <li>Semoga sehat, tenang, dan makin sayang sama diri sendiri.</li>
+              <li>Semoga yang kamu usahain pelan-pelan jadi nyata.</li>
+              <li>Semoga kita bisa ketawa bareng lebih sering.</li>
+            </ul>
+          </div>
+        </section>
+      </aside>
+
+      <!-- Memories / Gallery -->
+      <section class="card" id="memories" style="grid-column:1 / -1;">
+        <div class="pad">
+          <h2 style="margin:0 0 6px 0; font-size:20px;">Memori kecil kita 📸</h2>
+          <p class="mini" style="margin:0 0 12px 0;">
+            Ganti placeholder ini jadi foto-foto kalian. (Cara: ganti <b>src</b> di tag &lt;img&gt;.)
+          </p>
+
+          <div class="gallery">
+            <!-- GANTI src ke foto kamu (misal: images/1.jpg) -->
+            <div class="ph"><img alt="foto 1" src="" onerror="this.remove(); this.parentElement.textContent='Taruh foto 1 di sini';"/></div>
+            <div class="ph"><img alt="foto 2" src="" onerror="this.remove(); this.parentElement.textContent='Taruh foto 2 di sini';"/></div>
+            <div class="ph"><img alt="foto 3" src="" onerror="this.remove(); this.parentElement.textContent='Taruh foto 3 di sini';"/></div>
+            <div class="ph"><img alt="foto 4" src="" onerror="this.remove(); this.parentElement.textContent='Taruh foto 4 di sini';"/></div>
+            <div class="ph"><img alt="foto 5" src="" onerror="this.remove(); this.parentElement.textContent='Taruh foto 5 di sini';"/></div>
+            <div class="ph"><img alt="foto 6" src="" onerror="this.remove(); this.parentElement.textContent='Taruh foto 6 di sini';"/></div>
+          </div>
+
+          <div style="margin-top:14px; display:flex; flex-wrap:wrap; gap:10px;">
+            <button class="ghost" id="copyLink">Copy link halaman ini 🔗</button>
+            <button class="ghost" id="playMusic">Play/Pause musik 🎵</button>
+          </div>
+
+          <audio id="bgm" loop>
+            <!-- Opsional: taruh file musik kamu, misal: music.mp3 -->
+            <source src="" type="audio/mpeg" />
+          </audio>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Dibuat dengan 🫶. Kalau doi senyum, misi sukses.
+    </footer>
+  </div>
+
+  <!-- Letter Modal -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Surat ulang tahun">
+      <header>
+        <div class="brand">
+          <span class="dot"></span>
+          <div>
+            <div>Surat buat <span id="nameLetter">Nama Doi</span></div>
+            <div class="mini" id="dateLetter">15 Januari 2026</div>
+          </div>
+        </div>
+        <button class="ghost" id="closeLetter" style="border-radius:999px; padding:10px 12px;">Tutup ✖</button>
+      </header>
+
+      <div class="content">
+        <div class="letter" id="letterText"></div>
+      </div>
+
+      <div class="footer">
+        <button class="primary" id="anotherBoom">Sekali lagi 🎉</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /** ====== EDIT BAGIAN INI ====== */
+    const CONFIG = {
+      toName: "Nama Doi",
+      fromName: "Nama Kamu",
+      tagline: "“happy birthday, my favorite person.”",
+      // Set tanggal ulang tahun doi (YYYY-MM-DD). Bisa sama tahun ini, nanti auto ngitung next birthday.
+      birthday: "2026-01-15",
+      age: "??",
+      subtitle:
+        "Hari ini bukan cuma ulang tahun kamu—ini hari spesial yang bikin dunia jadi sedikit lebih manis. Aku bikin halaman kecil ini biar kamu bisa senyum setiap kali buka.",
+      letter:
+`Hai kamu,
+
+Selamat ulang tahun ya. Makasih udah jadi kamu—yang kadang cerewet, kadang lucu, tapi selalu bikin aku ngerasa “rumah”.
+Semoga di umur baru ini kamu makin bahagia, makin kuat, dan makin dikelilingi hal-hal baik.
+
+Aku bangga sama kamu.
+Dan aku sayang kamu, banyak. 💖
+
+— Kamu`
+    };
+    /** =========================== */
+
+    // Put config to UI
+    const fmtDateID = (d) => new Intl.DateTimeFormat("id-ID", { dateStyle:"long" }).format(d);
+
+    const nameTop = document.getElementById("nameTop");
+    const nameHero = document.getElementById("nameHero");
+    const nameLetter = document.getElementById("nameLetter");
+    const fromTop = document.getElementById("fromTop");
+    const tagline = document.getElementById("tagline");
+    const subtitle = document.getElementById("subtitle");
+    const ageChip = document.getElementById("ageChip");
+    const dateTop = document.getElementById("dateTop");
+    const dateLetter = document.getElementById("dateLetter");
+    const letterText = document.getElementById("letterText");
+
+    nameTop.textContent = CONFIG.toName;
+    nameHero.textContent = CONFIG.toName;
+    nameLetter.textContent = CONFIG.toName;
+    fromTop.textContent = CONFIG.fromName;
+    tagline.textContent = CONFIG.tagline;
+    subtitle.textContent = CONFIG.subtitle;
+    ageChip.textContent = CONFIG.age;
+    letterText.textContent = CONFIG.letter;
+
+    // Resolve next birthday at local timezone
+    function nextBirthdayDate(iso){
+      const [y,m,dd] = iso.split("-").map(Number);
+      const now = new Date();
+      let target = new Date(now.getFullYear(), m-1, dd, 0, 0, 0, 0);
+      if (target.getTime() <= now.getTime()) {
+        target = new Date(now.getFullYear()+1, m-1, dd, 0, 0, 0, 0);
+      }
+      return target;
+    }
+
+    const target = nextBirthdayDate(CONFIG.birthday);
+    dateTop.textContent = fmtDateID(target);
+    dateLetter.textContent = fmtDateID(target);
+
+    // Countdown
+    const dEl = document.getElementById("d");
+    const hEl = document.getElementById("h");
+    const mEl = document.getElementById("m");
+    const sEl = document.getElementById("s");
+    const countNote = document.getElementById("countNote");
+
+    function tick(){
+      const now = new Date();
+      let diff = target.getTime() - now.getTime();
+      if(diff < 0) diff = 0;
+
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff / (1000*60*60)) % 24);
+      const mins = Math.floor((diff / (1000*60)) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+
+      dEl.textContent = String(days);
+      hEl.textContent = String(hours).padStart(2,"0");
+      mEl.textContent = String(mins).padStart(2,"0");
+      sEl.textContent = String(secs).padStart(2,"0");
+
+      // Friendly note
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      const tday = new Date(target.getFullYear(), target.getMonth(), target.getDate()).getTime();
+      if (today === tday) countNote.textContent = "Hari ini harinya! 🎂";
+      else countNote.textContent = "Menuju ulang tahun berikutnya 🎈";
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // Hearts generator
+    const hearts = document.getElementById("hearts");
+    function spawnHearts(){
+      const n = 18;
+      hearts.innerHTML = "";
+      for(let i=0;i<n;i++){
+        const el = document.createElement("div");
+        el.className = "heart";
+        const left = Math.random()*100;
+        const dur = 6 + Math.random()*10;
+        const delay = Math.random()*4;
+        const size = 10 + Math.random()*14;
+        el.style.left = left + "vw";
+        el.style.bottom = (-20 - Math.random()*40) + "vh";
+        el.style.animationDuration = dur + "s";
+        el.style.animationDelay = delay + "s";
+        el.style.width = size + "px";
+        el.style.height = size + "px";
+        hearts.appendChild(el);
+      }
+    }
+    spawnHearts();
+
+    // Letter modal
+    const overlay = document.getElementById("overlay");
+    document.getElementById("openLetter").addEventListener("click", () => {
+      overlay.classList.add("show");
+      overlay.setAttribute("aria-hidden","false");
+    });
+    function closeModal(){
+      overlay.classList.remove("show");
+      overlay.setAttribute("aria-hidden","true");
+    }
+    document.getElementById("closeLetter").addEventListener("click", closeModal);
+    overlay.addEventListener("click", (e) => { if(e.target === overlay) closeModal(); });
+    document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModal(); });
+
+    // Copy link
+    document.getElementById("copyLink").addEventListener("click", async () => {
+      try{
+        await navigator.clipboard.writeText(location.href);
+        toast("Link dicopy ✅");
+      }catch{
+        toast("Gagal copy. Coba manual ya 🙏");
+      }
+    });
+
+    // Music
+    const bgm = document.getElementById("bgm");
+    let musicOn = false;
+    document.getElementById("playMusic").addEventListener("click", async () => {
+      if(!bgm.querySelector("source").getAttribute("src")){
+        toast("Isi dulu src musiknya di <audio> ya 🎵");
+        return;
+      }
+      try{
+        if(!musicOn){ await bgm.play(); musicOn = true; toast("Play 🎶"); }
+        else{ bgm.pause(); musicOn = false; toast("Pause ⏸"); }
+      }catch{
+        toast("Browser ngeblok autoplay. Pencet lagi ya 😄");
+      }
+    });
+
+    // Toast
+    function toast(msg){
+      const t = document.createElement("div");
+      t.textContent = msg;
+      t.style.position = "fixed";
+      t.style.left = "50%";
+      t.style.bottom = "22px";
+      t.style.transform = "translateX(-50%)";
+      t.style.padding = "10px 12px";
+      t.style.borderRadius = "14px";
+      t.style.border = "1px solid rgba(255,255,255,.18)";
+      t.style.background = "rgba(20,16,40,.78)";
+      t.style.backdropFilter = "blur(10px)";
+      t.style.boxShadow = "0 18px 45px rgba(0,0,0,.45)";
+      t.style.zIndex = 80;
+      t.style.fontSize = "13px";
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 2100);
+    }
+
+    // Confetti (simple)
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let anim = null;
+
+    function resize(){
+      canvas.width = innerWidth * devicePixelRatio;
+      canvas.height = innerHeight * devicePixelRatio;
+      ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    }
+    addEventListener("resize", resize);
+    resize();
+
+    function popConfetti(){
+      canvas.style.display = "block";
+      const count = 220;
+      particles = Array.from({length:count}).map(() => ({
+        x: innerWidth/2 + (Math.random()-0.5)*120,
+        y: innerHeight/2 + (Math.random()-0.5)*60,
+        vx: (Math.random()-0.5)*10,
+        vy: (Math.random()-0.9)*12,
+        r: 2 + Math.random()*4,
+        rot: Math.random()*Math.PI,
+        vr: (Math.random()-0.5)*0.2,
+        life: 70 + Math.random()*40
+      }));
+      if(anim) cancelAnimationFrame(anim);
+      loop();
+      setTimeout(() => { canvas.style.display="none"; }, 1600);
+    }
+
+    function loop(){
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.18;
+        p.rot += p.vr;
+        p.life -= 1;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.globalAlpha = Math.max(p.life/100, 0);
+        // no fixed colors: use gradient-ish via stroke style
+        ctx.fillStyle = "rgba(255,255,255,.9)";
+        ctx.fillRect(-p.r, -p.r, p.r*2, p.r*2);
+        ctx.restore();
+      });
+      particles = particles.filter(p => p.life > 0 && p.y < innerHeight + 40);
+      if(particles.length){
+        anim = requestAnimationFrame(loop);
+      } else {
+        ctx.clearRect(0,0,innerWidth,innerHeight);
+      }
+    }
+
+    document.getElementById("boom").addEventListener("click", () => { popConfetti(); toast("Yeay! 🎉"); });
+    document.getElementById("anotherBoom").addEventListener("click", () => { popConfetti(); toast("Sekali lagi! 🎉"); });
+
+  </script>
+</body>
+</html>
